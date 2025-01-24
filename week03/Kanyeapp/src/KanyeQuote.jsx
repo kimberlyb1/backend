@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./KanyeQuote.css";
 import image1 from "./assets/kanye1.jpg"
+import image2 from "./assets/kanye2.jpg"
+import image3 from "./assets/kanye3.jpg"
 const KanyeQuote = () => {
   const [quote, setQuote] = useState("");
   // Function to fetch a new quote
@@ -21,7 +23,9 @@ const KanyeQuote = () => {
       <p className="quote">{quote || "Click the button to get inspired!"}</p>
       <button onClick={fetchQuote}>Get Kanye Quote</button>
       <img src={image1}/>
-      <image1/>
+      <img src={image2}/>
+      <img src={image3}/>
+      {/* <image1/> */}
     </div>
   );
 };
