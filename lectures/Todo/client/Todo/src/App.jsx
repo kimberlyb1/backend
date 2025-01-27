@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./App.css"
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -13,6 +14,7 @@ function App() {
     try {
       const response = await axios.get("http://localhost:3000/gettodos");
       setTodos(response.data);
+      console.log("res", response);
     } catch (error) {
       console.error("Error fetching todos:", error);
     }
@@ -24,6 +26,7 @@ function App() {
       const response = await axios.post("http://localhost:3000/create", { todo: newTodo });
       setTodos([...todos, response.data]);
       setNewTodo("");
+      console.log("res", response);
     } catch (error) {
       console.error("Error adding todo:", error);
     }
@@ -50,25 +53,30 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
+<>
+<div className="whole container">
+
+    <div className="container">
+      <h1 className="container-h">Todo List</h1>
       <input
         type="text"
         value={newTodo}
         onChange={(e) => setNewTodo(e.target.value)}
         placeholder="Enter a new todo"
-      />
-      <button onClick={addTodo}>Add Todo</button>
-      <div>
+        />
+      <button className="btn" onClick={addTodo}>Add Todo</button>
+      <div className="todo-container">
         {todos.map((todo) => (
           <div key={todo._id} style={{ margin: "10px", padding: "10px", border: "1px solid black" }}>
-            <p>{todo.todo}</p>
+            <p className="todo-box">{todo.todo}</p>
             <button onClick={() => deleteTodo(todo._id)}>Delete</button>
             <button onClick={() => updateTodo(todo._id)}>Edit</button>
           </div>
         ))}
       </div>
+        </div>
     </div>
+        </>
   );
 }
 
