@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-
 import './App.css'
 import axios from 'axios'
 
@@ -7,6 +6,11 @@ function App() {
   // const [count, setCount] = useState(0)
 
   const [data, setData] = useState()
+  const [flag, setFlag] = useState(false)
+  const [edit, setEdit] = useState({
+    todo: ""
+  })
+  const [render, setRender] = useState(false)
 
   // test
   // test
@@ -25,7 +29,7 @@ function App() {
 
 
   useEffect(() => {
-
+    console.warn("USEEFFECT HIT AGAIN")
     axios({
       method: "get",
       url: "http://localhost:3000/gettodos"
@@ -38,7 +42,7 @@ function App() {
       })
       .catch(err => console.log("err", err))
 
-  }, [])
+  }, [flag])
 
   const handleNewToDo = (e) => {
 
@@ -62,61 +66,116 @@ function App() {
       method: "post",
       url: "http://localhost:3000/create",
       data: newToDo
+
     })
       .then(res => {
         console.log("res", res)
         // setNewToDo({todo: ""})
+        setFlag(!flag)
       })
-      .catch(err => console.log(reportError))
+      .catch(err => console.log(err))
 
   }
 
   const handleDelete = (e) => {
-    console.log("DEL Hit", e.target.id)
+
+    console.log("DEL Hit e.target.e", e.target.id)
 
     axios({
       method: "delete",
       url: `http://localhost:3000/delete/${e.target.id}`
     })
-    .then(res => {
-      console.log("re", res)
-      console.log(res.data._id)
-      setData((prev) => prev.filter((item) => item._id != res.data._id))
+      .then(res => {
+        console.log("re", res)
+        console.log("RES", res.data._id)
+        setData((prev) => prev.filter((item) => item._id != res.data._id))
+      })
+      .catch(err => console.log(err))
+  }
+
+  const handleEdit = () => {
+    setRender(!render)
+  }
+
+  const handleEditSubmit = (e) => {
+    console.log("HandleEdit HIT", e.target.id)
+    axios({
+      method: "put",
+      url: `http://localhost:3000/edit/${e.target.id}`,
+      data: edit
     })
-    .catch(err => console.log(err))
+      .then(res => {
+        console.log("$$$$$$$$", res)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const handleEditChange = (e) => {
+    console.log("handleEditChange  HIT", e.target.value)
+    setEdit({ todo: e.target.value })
   }
 
 
 
+  return (
+    <>
+      {/* {console.log("data", data)} */}
+      {/* {console.log("flag", flag)} */}
+      {/* {console.log("EDIT", edit)} */}
+      {console.warn("render", render)}
+      {/* {console.log("newToDo", newToDo)} */}
+      <input onChange={(e) => handleNewToDo(e)} />
 
-return (
-  <>
-    {console.log("data", data)}
-    {console.log("newToDo", newToDo)}
-
-    <input value={newToDo.todo || ""} onChange={(e) => handleNewToDo(e)} />
-
-    <button onClick={(e) => handleSubmit(e)}>Submit</button>
+      <button onClick={(e) => handleSubmit(e)}>Submit</button>
 
 
-    {data && data.sort((a,b) =>  b.created - a.created).map((item) => {
-      return (
+      {data && data.sort((a, b) => b.created - a.created).map((item) => {
+        return (
 
-        <div key={item._id}  style={{ marginBottom: "20px" }}>
+          <div key={item._id} style={{ marginBottom: "20px" }}>
 
-          <div style={{ border: '2px solid red' }}>
+            <div style={{ border: '2px solid red' }}>
 
-            <p> {item.todo}</p>
-            <button id={item._id} onClick={(e) => handleDelete(e)}>delete</button>
-            <button>edit</button>
+              {/* {render ? <p>TRUE</p>   :   <p>False</p>      }   */}
 
+
+              {render
+                ?
+                (
+                  <div>
+                    <input
+                      defaultValue={item.todo || ""}
+                      onChange={(e) => handleEditChange(e)}
+                    >
+                    </input>
+
+                    <button
+                      id={item._id}
+                      onClick={(e) => handleEditSubmit(e)}
+                    >
+                      Submit
+                    </button>
+
+                  </div>
+                )
+                :
+                (
+                  <p> {item.todo}</p>
+                )
+              }
+
+
+
+              <button id={item._id} onClick={(e) => handleDelete(e)}>delete</button>
+              <button id={item._id} onClick={(e) => handleEdit(e)}>edit</button>
+
+            </div>
           </div>
-        </div>
-      )
-    })}
+        )
+      })}
 
-  </>
-)
+    </>
+  )
 }
 
 export default App
