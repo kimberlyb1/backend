@@ -107,19 +107,20 @@ function App() {
   return (
     <>
        <p>Mid term madness</p>
+       <div style={{ marginBottom: "20px" }}> 
       <input 
       value={newToDo.todo}  
       onChange={(e) => handleNewToDo(e)} />
 
       <button onClick={(e) => handleSubmit(e)}>New Todo</button>
-
+</div>
 
       {data && data.sort((a, b) => b.created - a.created).map((item) => {
         return (
 
           <div key={item._id} style={{ marginBottom: "20px" }}>
 
-            <div id={item._id} style={{ border: '2px solid red' }}>
+            <div id={item._id} style={{ border: '2px solid black' }}>
 
          
               {render && editItemId == item._id             
@@ -148,10 +149,11 @@ function App() {
                 )
               }
 
-
+<div style={{ display: "flex", justifyContent: "space-between" }}>  
               <button id={item._id} onClick={(e) => handleDelete(e)}>delete</button>
               <button id={item._id} onClick={(e) => handleEdit(e)}>edit</button>
 
+            </div>
             </div>
           </div>
         )
