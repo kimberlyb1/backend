@@ -59,8 +59,8 @@ function App() {
         setNewToDo((prev) => ({
           ...prev,
           todo: ""
-        }))      
-          setFlag(!flag)
+        }))
+        setFlag(!flag)
       })
       .catch(err => console.log(err))
 
@@ -92,11 +92,18 @@ function App() {
     })
       .then(res => {
         console.log("$$$$$$$$", res)
-        
+        setData((prev) => {
+          return prev.map((item) => {
+            if (item._id == res.data._id) {
+              item.todo = res.data.todo
+            }
+            return item 
       })
-      .catch(err => console.log(err))
-      setRender(!render) 
-    }
+    })
+    setRender(!render)
+  })
+  .catch(err => console.log(err))
+}
 
   const handleEditChange = (e) => {
     setEdit({ todo: e.target.value })
@@ -106,14 +113,14 @@ function App() {
 
   return (
     <>
-       <p>Mid term madness</p>
-       <div style={{ marginBottom: "20px" }}> 
-      <input 
-      value={newToDo.todo}  
-      onChange={(e) => handleNewToDo(e)} />
+      <p>Mid term madness</p>
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          value={newToDo.todo}
+          onChange={(e) => handleNewToDo(e)} />
 
-      <button onClick={(e) => handleSubmit(e)}>New Todo</button>
-</div>
+        <button onClick={(e) => handleSubmit(e)}>New Todo</button>
+      </div>
 
       {data && data.sort((a, b) => b.created - a.created).map((item) => {
         return (
@@ -122,14 +129,14 @@ function App() {
 
             <div id={item._id} style={{ border: '2px solid black' }}>
 
-         
-              {render && editItemId == item._id             
-                 ?
+
+              {render && editItemId == item._id
+                ?
                 (
                   <div>
                     <input
                       defaultValue={item.todo || ""}
-                      id={item._id} 
+                      id={item._id}
                       onChange={(e) => handleEditChange(e)}
                     >
                     </input>
@@ -149,11 +156,11 @@ function App() {
                 )
               }
 
-<div style={{ display: "flex", justifyContent: "space-between" }}>  
-              <button id={item._id} onClick={(e) => handleDelete(e)}>delete</button>
-              <button id={item._id} onClick={(e) => handleEdit(e)}>edit</button>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <button id={item._id} onClick={(e) => handleDelete(e)}>delete</button>
+                <button id={item._id} onClick={(e) => handleEdit(e)}>edit</button>
 
-            </div>
+              </div>
             </div>
           </div>
         )
