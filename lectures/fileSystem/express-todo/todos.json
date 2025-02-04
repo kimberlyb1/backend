@@ -3,11 +3,16 @@
     "todo": "stuff"
   },
   {
+<<<<<<< HEAD
     "todo": "Fix car",
     "id": 1736877299361
   },
   {
     "todo": "Kim",
     "id": 1737063475770
+=======
+    "todo": "Go Walk",
+    "id": 1736887824444
+>>>>>>> 70aa466026c52edda5d73c7d3028ca7dccfe51ed
   }
 ]
