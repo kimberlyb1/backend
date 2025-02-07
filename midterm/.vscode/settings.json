@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
-        "gettodos"
+        "deletetodo",
+        "gettodos",
+        "updatetodo"
     ]
 }

@@ -28,8 +28,8 @@ function App() {
       url: "http://localhost:3000/gettodos"
     })
       .then(res => {
+        console.log("res", res)
         setData(res.data)
-
       })
       .catch(err => console.log("err", err))
 

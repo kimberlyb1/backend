@@ -136,6 +136,10 @@
 // app.listen(PORT, () => {
 //     console.log(`Server is running on http://localhost:${PORT}`);
 // });
+
+
+// Get all todos - McGrain way of doing things - PROMISES
+
 const express = require('express'); 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -157,7 +161,8 @@ mongoose.connect(process.env.MONGO_URI)
 // Define Mongoose schema and model
 const TodoSchema = new mongoose.Schema({
     todo: String,
-    created: { type: Number, default: Date.now }
+    created: { type: Number, default: Date.now },
+    
 });
 const Todo = mongoose.model('Todo', TodoSchema);
 
@@ -181,11 +186,11 @@ app.get("/gettodos", (req, res) => {
 });
 
 // POST a new todo
-app.post('/add todo', (req, res) => {
+app.post('/create', (req, res) => {
     console.log("POST /add todo hit with data:", req.body);
 
     new Todo({ todo: req.body.todo }).save()
-        .then(savedTodo => {
+        .then(savedTodo => { 
             console.log("New Todo Created:", savedTodo);
             res.json(savedTodo);
         })
@@ -193,11 +198,11 @@ app.post('/add todo', (req, res) => {
 });
 
 // PUT to update a todo
-app.put('/update todo/:id', (req, res) => {
+app.put('/edit/:id', (req, res) => {
     console.log(`PUT /update todo/${req.params.id}`);
 
     Todo.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(updatedTodo => {
+        .then(updatedTodo => {  
             console.log("Updated Todo:", updatedTodo);
             res.json(updatedTodo);
         })
@@ -205,11 +210,11 @@ app.put('/update todo/:id', (req, res) => {
 });
 
 // DELETE a todo
-app.delete('/delete todo/:id', (req, res) => {
+app.delete('/delete/:id', (req, res) => {
     console.log(`DELETE /delete todo/${req.params.id} hit`);
 
     Todo.findByIdAndDelete(req.params.id)
-        .then(deletedTodo => {
+        .then(deletedTodo => {  // Corrected variable name here
             if (deletedTodo) {
                 console.log("Deleted Todo:", deletedTodo);
                 res.json(deletedTodo);
@@ -223,6 +228,7 @@ app.delete('/delete todo/:id', (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
